@@ -27,7 +27,7 @@ def calculate(tsumeru, limit):
             solution = set([nx.index(max(nx))])
             value = v
     
-    print (solution, value) #for debug
+    print(solution, value, file=sys.stderr) #for debug
     return list(solution)[random.randint(0, len(solution) - 1)]
 
 def findMin(tsumeru, limit, depth, MAX) :
@@ -126,41 +126,50 @@ def display(board) :
 |%s|%s|%s|
 +--+--+--+
 '''
-    print '\n' + p % tuple(q), 
+    print('\n' + p % tuple(q) )
 
 def main():
     global difficulty
     while True:
-        print "choose computer's level"
-        print '\t3~4 play with 1 color, 5~6 play without numbers'
-        print '\tlevel 0, computer thinks 3 steps'
-        print '\twith each higher level, computer thinks more 2 steps'
-        difficulty = int(raw_input('level : '))
-        if difficulty < 0 or difficulty > 6 :
-            print 'error input!'
+        print(
+"""choose computer's level
+\t3~4 play with 1 color, 5~6 play without numbers
+\tlevel 0, computer thinks 3 steps
+\twith each higher level, computer thinks more 2 steps""")
+        try:
+            difficulty = int(input('level : '))
+            if difficulty < 0 or difficulty > 6 :
+                raise
+        except:
+            print('error input!')
             continue
-        else :
-            hard = 3 + difficulty * 2
-            break
+        
+        hard = 3 + difficulty * 2
+        break
         
     while True:
-        print '\nchoose a mode'
-        print '\t-2 : computer start with 2 steps'
-        print '\t-1 : computer go first'
-        print '\t 0 : random'
-        print '\t 1 : you go first'
-        print '\t 2 : you start with 2 steps'
-        mode = int(raw_input('mode : '))
-        if mode < -2 or mode > 2 :
-            print 'error input!'
+        print(
+"""\nchoose a mode
+\t0 : random
+\t1 : you go first
+\t2 : computer go first
+\t3 : you start with 2 steps
+\t4 : computer start with 2 steps""")
+        try:
+            mode = int(input('mode : '))
+            if mode < 0 or mode > 4 :
+                raise
+        except:
+            print('error input!')
             continue
-        else : break
+            
+        break
     
     board = [0] * 9
-    if mode == -2 :
+    if mode == 4 :
         play(board, calculate(board, hard))
         play(board, calculate(board, hard), 2)
-    elif mode == -1 :
+    elif mode == 2 :
         play(board, calculate(board, hard))
     elif mode == 0 and random.randint(0, 1) == 0:
         play(board, calculate(board, hard))
@@ -168,24 +177,29 @@ def main():
     while True:
         display(board)
         if check(board) :
-            print 'computer win!'
+            print('computer win!')
             break
         elif max(board) >= 50 :
-            print 'tie!'
+            print('tie!')
             break
-        step = int(raw_input('input the position (1-9): ')) - 1
-        if step < 0 or step > 8 or board[step] != 0 :
-            print "illegal!!"
+        
+        try:
+            step = int(input('input the position (1-9): ')) - 1
+            if step < 0 or step > 8 or board[step] != 0 :
+                raise
+        except:
+            print("illegal!!")
             continue
-        if mode == 2 and max(board) == 1:
+            
+        if mode == 3 and max(board) == 1:
             play(board, step, 2)
         else :
             play(board, step)
-        if mode == 2 and max(board) == 1:
+        if mode == 3 and max(board) == 1:
             continue
         display(board)
         if check(board) :
-            print 'you win!'
+            print('you win!')
             break
         play(board, calculate(board, hard))
 
