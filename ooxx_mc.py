@@ -31,17 +31,17 @@ def calculate(tsumeru, limit):
         if tsumeru[i] != 0 : solution[i] = depth * limit * -10
     
     ii = 1
-    for k,v in solution.iteritems() : 
+    for k,v in solution.items() : # for debug
         tt = float(v + limit * depth)/float(limit * depth * 2)
         pp = "%0.3f" % tt
         if v <= -10 * limit * depth : color = '\033[0;30m'
         elif v < -1 * limit * depth : color = '\033[1;31m'
         elif v < 0 : color = '\033[1;32m'
         else : color = '\033[1;36m'
-        sys.stdout.write(str(k+1) + ':' + color + pp + "%\033[0m\t") # for debug
-        if ii % 3 == 0: print ' '
+        sys.stderr.write(str(k+1) + ':' + color + pp + "%\033[0m\t")
+        if ii % 3 == 0: print(' ', file=sys.stderr)
         ii += 1
-    return max(solution.iteritems(), key=operator.itemgetter(1))[0]
+    return max(solution.items(), key=operator.itemgetter(1))[0]
 
 def expand(pos) :
     def rotate(t) :
@@ -117,47 +117,57 @@ def display(board) :
 |%s|%s|%s|
 +--+--+--+
 '''
-    print '\n' + p % tuple(q), 
+    print('\n' + p % tuple(q) )
 
 def main():
     global difficulty
     while True:
-        print "choose computer's level"
-        print '\t3~4 play with 1 color, 5~6 play without numbers'
-        print '\tlevel 0, computer thinks 3 steps'
-        print '\twith each higher level, computer thinks more 2 steps'
-        difficulty = int(raw_input('level : '))
-        if difficulty < 0 or difficulty > 6 :
-            print 'error input!'
+        print(
+"""choose computer's level
+\t3~4 play with 1 color, 5~6 play without numbers
+\tlevel 0, computer thinks 3 steps
+\twith each higher level, computer thinks more 2 steps""")
+        try:
+            difficulty = int(input('level : '))
+            if difficulty < 0 or difficulty > 6 :
+                raise
+        except:
+            print('error input!')
             continue
-        else :
-            if difficulty == 0 : hard = 100
-            elif difficulty == 1 : hard = 200
-            elif difficulty == 2 : hard = 400
-            elif difficulty == 3 : hard = 600
-            elif difficulty == 4 : hard = 1000
-            elif difficulty == 5 : hard = 2500
-            else : hard = 5000
-            break
+            
+        match difficulty :
+            case 0 : hard = 100
+            case 1 : hard = 200
+            case 2 : hard = 400
+            case 3 : hard = 600
+            case 4 : hard = 1000
+            case 5 : hard = 2500
+            case _ : hard = 5000
+        break
         
     while True:
-        print '\nchoose a mode'
-        print '\t-2 : computer start with 2 steps'
-        print '\t-1 : computer go first'
-        print '\t 0 : random'
-        print '\t 1 : you go first'
-        print '\t 2 : you start with 2 steps'
-        mode = int(raw_input('mode : '))
-        if mode < -2 or mode > 2 :
-            print 'error input!'
+        print(
+"""\nchoose a mode
+\t0 : random
+\t1 : you go first
+\t2 : computer go first
+\t3 : you start with 2 steps
+\t4 : computer start with 2 steps""")
+        try:
+            mode = int(input('mode : '))
+            if mode < 0 or mode > 4 :
+                raise
+        except:
+            print('error input!')
             continue
-        else : break
+            
+        break
     
     board = [0] * 9
-    if mode == -2 :
+    if mode == 4 :
         play(board, calculate(board, hard))
         play(board, calculate(board, hard), 2)
-    elif mode == -1 :
+    elif mode == 2 :
         play(board, calculate(board, hard))
     elif mode == 0 and random.randint(0, 1) == 0:
         play(board, calculate(board, hard))
@@ -165,24 +175,29 @@ def main():
     while True:
         display(board)
         if check(board) :
-            print 'computer win!'
+            print('computer win!')
             break
         elif max(board) >= 50 :
-            print 'tie!'
+            print('tie!')
             break
-        step = int(raw_input('input the position (1-9): ')) - 1
-        if step < 0 or step > 8 or board[step] != 0 :
-            print "illegal!!"
+            
+        try:
+            step = int(input('input the position (1-9): ')) - 1
+            if step < 0 or step > 8 or board[step] != 0 :
+                raise
+        except:
+            print("illegal!!")
             continue
-        if mode == 2 and max(board) == 1:
+            
+        if mode == 3 and max(board) == 1:
             play(board, step, 2)
         else :
             play(board, step)
-        if mode == 2 and max(board) == 1:
+        if mode == 3 and max(board) == 1:
             continue
         display(board)
         if check(board) :
-            print 'you win!'
+            print('you win!')
             break
         play(board, calculate(board, hard))
 
