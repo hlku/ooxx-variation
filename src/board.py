@@ -13,52 +13,17 @@ class Board:
             self.__log.setLevel(logging.DEBUG)
             self.__log.debug('Debug mode is on')
 
-    def __fresh(self, pos:list = None) -> None:
-        """Game rules: at most 3 steps of one side can be on the board, remove the oldest step."""
-        if pos is None: pos = self.__board
+    def __fresh(self) -> None:
+        """fresh the board."""
+        freshBoard(self.__board)
 
-        oldest = max(pos) - 6
-        if oldest <= 0: return #no step needs to be removed
-        for i in range(9):
-            if pos[i] == oldest: pos[i] = 0
-
-    def check(self, pos:list = None) -> bool:
-        """Check whether someone has won."""
-        if pos is None: pos = self.__board
-        k = lambda a, b, c : True if \
-            (pos[a] % 2 == pos[b] % 2 == pos[c] % 2) and \
-            pos[a] != 0 and pos[b] != 0 and pos[c] != 0 \
-            else False #check whether a line of three steps belongs to the player's side
-        if k(0, 1, 2) or k(3, 4, 5) or k(6, 7, 8) or k(0, 3, 6) or \
-           k(1, 4, 7) or k(2, 5, 8) or k(0, 4, 8) or k(2, 4, 6) : return True
-        return False
+    def check(self) -> bool:
+        """Check whether the current board has a winner."""
+        return checkWin(tuple(self.__board))
     
-    def expand(self, pos:list = None) -> list:
+    def expand(self) -> tuple:
         """Expand the current board state to all possible next states and remove duplicates."""
-        def rotate(t) : #rotate the board 90 degrees clockwise
-            return [t[6], t[3], t[0], t[7], t[4], t[1], t[8], t[5], t[2]]
-        def mirror(t) : #mirror the board horizontally
-            return [t[2], t[1], t[0], t[5], t[4], t[3], t[8], t[7], t[6]]
-
-        if pos is None: pos = self.__board
-        biggest = max(pos)
-        ret = [] #list of possible next states, without duplicates
-        for i in range(0, 9) :
-            if pos[i] == 0 : #this position is empty, can be played
-                tmp = list(pos)
-                tmp[i] = biggest + 1
-                self.__fresh(tmp)
-                if tmp.count(0) > 3 : #duplicate states only exist when there are more than 3 empty positions
-                    if rotate(tmp) in ret or \
-                       rotate(rotate(tmp)) in ret or \
-                       rotate(rotate(rotate(tmp))) in ret or \
-                       mirror(tmp) in ret or \
-                       mirror(rotate(tmp)) in ret or \
-                       mirror(rotate(rotate(tmp))) in ret or \
-                       mirror(rotate(rotate(rotate(tmp)))) in ret : pass
-                    else : ret.append(tmp)
-                else : ret.append(tmp)
-        return ret
+        return expandBoard(tuple(self.__board))
 
     def playStep(self, step:int, times:int=1) -> None:
         """Play a step on the board.
@@ -109,6 +74,50 @@ class Board:
         """Get the maximum step number on the board."""
         return max(self.__board)
 
-    def getBoard(self) -> list:
-        """Get the current board state as a list of 9 integers."""
-        return self.__board
+    def getBoard(self) -> tuple:
+        """Get the current board state as a tuple of 9 integers."""
+        return tuple(self.__board)
+
+#static methods for board operations, can be used by other classes without creating a Board instance
+def freshBoard(pos:list) -> None:
+    """Game rules: at most 3 steps of one side can be on the board, remove the oldest step."""
+    oldest = max(pos) - 6
+    if oldest <= 0: return #no step needs to be removed
+    for i in range(9):
+        if pos[i] == oldest: pos[i] = 0
+
+def checkWin(pos:tuple) -> bool:
+    """Check whether someone has won."""
+    k = lambda a, b, c : True if \
+        (pos[a] % 2 == pos[b] % 2 == pos[c] % 2) and \
+        pos[a] != 0 and pos[b] != 0 and pos[c] != 0 \
+        else False #check whether a line of three steps belongs to the player's side
+    if k(0, 1, 2) or k(3, 4, 5) or k(6, 7, 8) or k(0, 3, 6) or \
+       k(1, 4, 7) or k(2, 5, 8) or k(0, 4, 8) or k(2, 4, 6) : return True
+    return False
+
+def expandBoard(pos:tuple) -> tuple:
+    """Expand the pos's state to all possible next states and remove duplicates."""
+    def rotate(t) : #rotate the board 90 degrees clockwise
+        return [t[6], t[3], t[0], t[7], t[4], t[1], t[8], t[5], t[2]]
+    def mirror(t) : #mirror the board horizontally
+        return [t[2], t[1], t[0], t[5], t[4], t[3], t[8], t[7], t[6]]
+
+    biggest = max(pos)
+    ret = [] #list of possible next states, without duplicates
+    for i in range(0, 9) :
+        if pos[i] == 0 : #this position is empty, can be played
+            tmp = list(pos)
+            tmp[i] = biggest + 1
+            freshBoard(tmp)
+            if tmp.count(0) > 3 : #duplicate states only exist when there are more than 3 empty positions
+                if rotate(tmp) in ret or \
+                   rotate(rotate(tmp)) in ret or \
+                   rotate(rotate(rotate(tmp))) in ret or \
+                   mirror(tmp) in ret or \
+                   mirror(rotate(tmp)) in ret or \
+                   mirror(rotate(rotate(tmp))) in ret or \
+                   mirror(rotate(rotate(rotate(tmp)))) in ret : pass
+                else : ret.append(tmp)
+            else : ret.append(tmp)
+    return tuple(ret)

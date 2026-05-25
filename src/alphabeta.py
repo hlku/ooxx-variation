@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 import logging, random
+import board
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class AlphaBeta:
@@ -30,10 +31,10 @@ class AlphaBeta:
 
     def __findMin(self, tsumeru, depth, MAX):
         value = 100
-        if self.__board.check(tsumeru) : return 99 - depth
+        if board.checkWin(tsumeru) : return 99 - depth
         elif depth >= self.__limit : return 0
         
-        for nx in self.__board.expand(tsumeru) :
+        for nx in board.expandBoard(tsumeru) :
             value = min(value, self.__findMax(nx, depth + 1, value))
             if value < MAX : return value
             
@@ -41,10 +42,10 @@ class AlphaBeta:
         
     def __findMax(self, tsumeru, depth, MIN) :
         value = -100
-        if self.__board.check(tsumeru) : return -99 + depth
+        if board.checkWin(tsumeru) : return -99 + depth
         elif depth >= self.__limit : return 0
         
-        for nx in self.__board.expand(tsumeru) :
+        for nx in board.expandBoard(tsumeru) :
             value = max(value, self.__findMin(nx, depth + 1, value))
             if value > MIN : return value
             

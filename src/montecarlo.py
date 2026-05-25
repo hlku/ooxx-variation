@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 import random, sys, operator, logging
+import board
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class MonteCarlo:
@@ -21,14 +22,14 @@ class MonteCarlo:
             for one in range(0, self.__limit) : # MC for limit times
                 clone = list(nx) 
                 for rd in range(0, self.__depth) : # depth
-                    if self.__board.check(clone) and rd % 2 == 0 : # win
+                    if board.checkWin(clone) and rd % 2 == 0 : # win
                         solutions[pos] = solutions.get(pos, 0) + self.__depth - rd
                         break
-                    elif self.__board.check(clone) and rd % 2 == 1 : # lose
+                    elif board.checkWin(clone) and rd % 2 == 1 : # lose
                         if rd == 1 : solutions[pos] = solutions.get(pos, 0) - self.__depth * 10
                         else : solutions[pos] = solutions.get(pos, 0) - self.__depth + rd
                         break
-                    nxlist = self.__board.expand(clone)
+                    nxlist = board.expandBoard(clone)
                     clone = nxlist[random.randint(0, len(nxlist) - 1)] # random choose a step
 
                     if rd >= 39 : # tie 
@@ -45,7 +46,7 @@ class MonteCarlo:
             elif v < -1 * self.__limit * self.__depth : color = '\033[1;31m'
             elif v < 0 : color = '\033[1;32m'
             else : color = '\033[1;36m'
-            sys.stderr.write(str(k+1) + ':' + color + pp + "%\033[0m\t")
-            if ii % 3 == 0: print(' ', file=sys.stderr)
+            self.__log.debug(str(k+1) + ':' + color + pp + "%\033[0m\t")
+            if ii % 3 == 0: self.__log.debug(' ')
             ii += 1
         return max(solutions.items(), key=operator.itemgetter(1))[0]
