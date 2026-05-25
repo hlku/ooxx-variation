@@ -8,5 +8,6 @@ if __name__ == '__main__':
     watcher.start()
 
     ooxx = src.ooxx.OOXX()
-    ooxx.start() 
+    while True: #forever playing until Ctrl+c
+        ooxx.start()
    
