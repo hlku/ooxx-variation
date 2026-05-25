@@ -20,11 +20,7 @@ class Settings:
             sys.exit()
         if self.data is None:
             self.log.critical('config.yml is empty')
-            sys.exit()
-            
-        if self.getConfig('debug'):
-            self.log.setLevel(logging.DEBUG)
-            self.log.debug('Debug mode is on')            
+            sys.exit()        
 
     def getConfig(self, key) -> Any | None:
         if key in self.data:
