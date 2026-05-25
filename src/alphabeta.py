@@ -9,7 +9,7 @@ class AlphaBeta:
         self.__settings = settings
         self.__board = board
         #search depth limit, the higher the smarter computer, but more time computing
-        self.__limit = 3 + self.__settings.getConfig('level')['ab'] * 2 
+        self.__depth = 3 + self.__settings.getConfig('level') * 2 
         
         self.__log = logging.getLogger(__name__)
         if self.__settings.getConfig('debug'):
@@ -39,7 +39,7 @@ class AlphaBeta:
            depth: the current depth of the search tree
            MAX: the current best value of computer's possible next steps"""
         if board.checkWin(tsumeru) : return 99 - depth #computer win, the sooner the better
-        elif depth >= self.__limit : return 0 #reach the depth limit, no best solution found
+        elif depth >= self.__depth : return 0 #reach the depth limit, no best solution found
         
         value = 100
         for nx in board.expandBoard(tsumeru) : #every possible postion for user's next step
@@ -58,7 +58,7 @@ class AlphaBeta:
            depth: the current depth of the search tree
            MIN: the current best value of user's possible next steps"""
         if board.checkWin(tsumeru) : return -99 + depth #user win, the sooner the worse
-        elif depth >= self.__limit : return 0 #reach the depth limit, no best solution found
+        elif depth >= self.__depth : return 0 #reach the depth limit, no best solution found
         
         value = -100
         for nx in board.expandBoard(tsumeru) : #every possible postion for computer's next step

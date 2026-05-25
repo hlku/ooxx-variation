@@ -5,10 +5,13 @@ import board
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class MonteCarlo:
     def __init__(self, settings, board) -> None:
+        """Initialize the AlphaBeta engine based on the settings."""
         self.__settings = settings
         self.__board = board
-        self.__limit = self.__settings.getConfig('level')['mc']
-        self.__depth = 25
+        #number of simulations for each random possible next step, the higher the more accurate, but more time computing
+        self.__limit = self.__settings.getConfig('mctimes')
+        #search depth limit, the higher the smarter computer, but more time computing
+        self.__depth = 3 + self.__settings.getConfig('level') * 2 
         
         self.__log = logging.getLogger(__name__)
         if self.__settings.getConfig('debug'):
