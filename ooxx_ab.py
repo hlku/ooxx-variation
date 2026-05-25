@@ -7,12 +7,6 @@ import sys
 difficulty = 0
 
 def calculate(tsumeru, limit):
-    for i in range(0, 9) : # optimization for only move
-        if tsumeru[i] != 0 : continue
-        pos = list(tsumeru)
-        pos[i] = max(pos) + 1
-        if check(pos) : return i # win move!
-
     solution = set([9])
     value = -100
 
@@ -24,7 +18,7 @@ def calculate(tsumeru, limit):
             solution = set([nx.index(max(nx))])
             value = v
     
-    print(solution, value, file=sys.stderr) #for debug
+    #print(solution, value, file=sys.stderr) #for debug
     return list(solution)[random.randint(0, len(solution) - 1)]
 
 def findMin(tsumeru, limit, depth, MAX) :
@@ -128,11 +122,11 @@ def display(board) :
 def main():
     global difficulty
     while True:
-        print(
-"""choose computer's level
+        print('''\
+choose computer's level
 \t3~4 play with 1 color, 5~6 play without numbers
 \tlevel 0, computer thinks 3 steps
-\twith each higher level, computer thinks more 2 steps""")
+\twith each higher level, computer thinks more 2 steps''')
         try:
             difficulty = int(input('level : '))
             if difficulty < 0 or difficulty > 6 :
@@ -145,13 +139,13 @@ def main():
         break
         
     while True:
-        print(
-"""\nchoose a mode
+        print('''\
+\nchoose a mode
 \t0 : random
 \t1 : you go first
 \t2 : computer go first
 \t3 : you start with 2 steps
-\t4 : computer start with 2 steps""")
+\t4 : computer start with 2 steps''')
         try:
             mode = int(input('mode : '))
             if mode < 0 or mode > 4 :
