@@ -12,9 +12,6 @@ def calculate(tsumeru, limit):
         pos = list(tsumeru)
         pos[i] = max(pos) + 1
         if check(pos) : return i # win move!
-        pos = list(tsumeru)
-        pos[i] = max(pos) + 2
-        if check(pos) : return i # be ware!
 
     solution = set([9])
     value = -100
