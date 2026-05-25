@@ -138,7 +138,7 @@ class OOXX:
 
     def __checkStatus(self, player:str) -> bool:
         """Check whether the game has ended."""
-        if self.__engine.checkWin():
+        if self.__engine.checkWin(self.__board):
             print('====== %s won! ======', player)
             return True
         elif max(self.__board) >= 50 : 
