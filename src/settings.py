@@ -74,7 +74,7 @@ class Settings:
             self.__log.error('Debug value is invalid')
             self.__data['debug'] = False #default no debugging
 
-    def getConfig(self, key) -> Any | None:
+    def getConfig(self, key:str) -> Any | None:
         """Get the value of a setting by key."""
         if key in self.__data:
             return self.__data[key]
