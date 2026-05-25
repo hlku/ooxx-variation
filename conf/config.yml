@@ -9,4 +9,4 @@ display:
     0 #0=coloring number, 1=colorless number, 2=O and X
     
 debug: 
-    True
+    False
