@@ -2,7 +2,7 @@
 import logging, random
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
-class MonteCarlo:
+class AlphaBeta:
     def __init__(self, settings, board) -> None:
         self.__settings = settings
         self.__board = board
