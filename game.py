@@ -1,0 +1,9 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+import src.ooxx, src.watcher
+
+if __name__ == '__main__':
+    watcher = src.watcher.Watcher()
+    ooxx = src.ooxx.OOXX()
+   
