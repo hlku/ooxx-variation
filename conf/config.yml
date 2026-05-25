@@ -2,8 +2,10 @@ engine:
     MonteCarlo # MonteCarlo/mc or AlphaBeta/ab
     
 level:
-    mc: 5000 #N>0, means how many times MonteCarlo do random choosing
-    ab: 4 #N>=0, means computer thinks 3+2N steps 
+    4 #N>=0, means computer thinks 3+2N steps 
+
+mctimes: 
+    5000 #N>0, means how many times MonteCarlo do random choosing
 
 display: 
     0 #0=coloring number, 1=colorless number, 2=O and X

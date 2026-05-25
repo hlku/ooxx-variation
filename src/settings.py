@@ -26,7 +26,8 @@ class Settings:
         """If the yaml file read fails, set default values."""
         self.__data = {
             'engine': 'AlphaBeta',
-            'level': {'mc': 5000, 'ab': 4},
+            'level': 4,
+            'mctimes': 5000,
             'display': 0,
             'debug': False
         }
@@ -50,18 +51,20 @@ class Settings:
                 self.__data['engine'] = 'AlphaBeta' #default to AlphaBeta
 
         level = self.getConfig('level') 
-        if level is None or not isinstance(level, dict):
-            self.__log.error('Level value is not set or invalid')
-            self.__data['level'] = {'mc': 5000, 'ab': 4} #default level
-        else:
-            if level['mc'] is None or not isinstance(level['mc'], int) \
-               or level['mc'] <= 0 or level['mc'] > 1000000:
-                self.__log.error('MonteCarlo level is invalid')
-                self.__data['level']['mc'] = 5000 #default MonteCarlo level
-            if level['ab'] is None or not isinstance(level['ab'], int) \
-               or level['ab'] < 0 or level['ab'] > 45:
-                self.__log.error('AlphaBeta level is invalid')
-                self.__data['level']['ab'] = 4 #default AlphaBeta level
+        if level is None or not isinstance(level, int):
+            self.__log.error('Level value is invalid')
+            self.__data['level'] = 4 #default level
+        elif level < 0 or level > 45:
+            self.__log.error('Level value should be 0 ~ 45')
+            self.__data['level'] = 4 #default level
+
+        mctimes = self.getConfig('mctimes') 
+        if mctimes is None or not isinstance(mctimes, int):
+            self.__log.error('mctimes value is invalid')
+            self.__data['mctimes'] = 5000 #default mctimes
+        elif mctimes <= 0 or mctimes > 1000000:
+            self.__log.error('mctimes value should be 1 ~ 1000000')
+            self.__data['mctimes'] = 5000 #default mctimes
         
         display = self.getConfig('display')
         if display is None or not isinstance(display, int):
