@@ -42,7 +42,9 @@ class Settings:
 
         engine = self.getConfig('engine')
         match engine:
-            case 'MonteCarlo' | 'mc' | 'AlphaBeta' | 'ab': pass
+            case 'mc': self.__data['engine'] = 'MonteCarlo'
+            case 'ab': self.__data['engine'] = 'AlphaBeta'
+            case 'MonteCarlo' | 'AlphaBeta' : pass
             case _:
                 self.__log.error('Unknown engine: %s' % engine)
                 self.__data['engine'] = 'AlphaBeta' #default to AlphaBeta
