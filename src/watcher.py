@@ -1,18 +1,18 @@
 # -*- coding: UTF-8 -*-
 import os, sys, signal, logging
 
-logging.basicConfig(level=logging.DEBUG, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
+logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class Watcher:
     def __init__(self) -> None:        
-        self.log = logging.getLogger(__name__)
-        self.child = os.fork()
-        if self.child == 0 : return
+        self.__log = logging.getLogger(__name__)
+        child = os.fork()
+        if child == 0 : return
         else: self.watch()
 
     def watch(self):
         try: os.wait()
         except KeyboardInterrupt:
-            self.log.info("Ctrl-c received! Sending kill to threads.")
+            self.__log.info("Ctrl-c received! Sending kill to threads.")
             self.kill()
         sys.exit()
 
