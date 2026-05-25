@@ -8,7 +8,8 @@ class AlphaBeta:
         """Initialize the AlphaBeta engine based on the settings."""
         self.__settings = settings
         self.__board = board
-        self.__limit = 3 + self.__settings.getConfig('level')['ab'] * 2
+        #search depth limit, the higher the smarter computer, but more time computing
+        self.__limit = 3 + self.__settings.getConfig('level')['ab'] * 2 
         
         self.__log = logging.getLogger(__name__)
         if self.__settings.getConfig('debug'):
