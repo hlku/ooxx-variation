@@ -5,5 +5,8 @@ import src.ooxx, src.watcher
 
 if __name__ == '__main__':
     watcher = src.watcher.Watcher()
+    watcher.start()
+
     ooxx = src.ooxx.OOXX()
+    ooxx.start() 
    

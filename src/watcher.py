@@ -5,6 +5,8 @@ logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(lev
 class Watcher:
     def __init__(self) -> None:        
         self.__log = logging.getLogger(__name__)
+
+    def start(self) -> None:
         child = os.fork()
         if child == 0 : return
         else: self.watch()
