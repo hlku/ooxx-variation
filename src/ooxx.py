@@ -88,7 +88,7 @@ class OOXX:
     def __checkStatus(self, player:str) -> bool:
         """Check whether the game has ended."""
         if self.__board.check():
-            print('====== %s won! ======', player)
+            print('====== %s won! ======' % player)
             return True
         elif self.__board.getMaxStep() >= 50 : 
             print('====== Tie! ======')

@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 import logging, yaml
+import typing
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class Settings:
@@ -78,7 +79,7 @@ class Settings:
             self.__log.error('Debug value is invalid')
             self.__data['debug'] = False #default no debugging
 
-    def getConfig(self, key:str) -> Any | None:
+    def getConfig(self, key:str) -> typing.Any | None:
         """Get the value of a setting by key."""
         if key in self.__data:
             return self.__data[key]

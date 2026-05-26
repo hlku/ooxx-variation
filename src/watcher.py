@@ -7,18 +7,18 @@ class Watcher:
         self.__log = logging.getLogger(__name__)
 
     def start(self) -> None:
-        child = os.fork()
-        if child == 0 : return
-        else: self.watch()
+        self.__child = os.fork()
+        if self.__child == 0 : return
+        else: self.__watch()
 
-    def watch(self):
+    def __watch(self):
         try: os.wait()
         except KeyboardInterrupt:
             self.__log.info("Ctrl-c received! Sending kill to threads.")
-            self.kill()
+            self.__kill()
         sys.exit()
 
-    def kill(self) -> None:
-        try: os.kill(self.child, signal.SIGKILL)
+    def __kill(self) -> None:
+        try: os.kill(self.__child, signal.SIGKILL)
         except OSError: pass
 
