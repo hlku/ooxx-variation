@@ -8,21 +8,39 @@ class AlphaBeta(engine.Engine):
         """Initialize the AlphaBeta engine based on the settings."""
         super().__init__(settings, board)
     
-    def _engineCalculate(self, times:int) -> int:
+    def _engineCalculate(self) -> int:
         """Calculate the best next step using the Alpha–Beta Pruning Algorithm."""
         solutions = set() #positions of all best next steps 
         value = -100 #value of a step, the higher the better for the computer
-        for nx in self._board.expand(times) : #every possible postion for the next step
+        for nx in self._board.expand() : #every possible postion for the next step
             v = self.__findMin(nx, 1, value) #get the value of this step
             if value == v : #same value to old solutions, add to set
                 solutions.add(nx.index(max(nx)))
             elif value < v : #find a better solution, clear old solutions and add new one
-                solutions = set([nx.index(max(nx))])
+                solutions.clear()
+                solutions.add(nx.index(max(nx)))
                 value = v
 
         self._log.debug("Solutions: %s, Value: %d", str(solutions), value)
         #randomly choose one of the best solutions if there are multiple ones
-        return list(solutions)[random.randint(0, len(solutions) - 1)] 
+        return list(solutions)[random.randint(0, len(solutions) - 1)]
+    
+    def _engineCalculate2(self, tsumeru: tuple) -> tuple :
+        """Calculate the best 1st, 3rd steps if computer starts with 2 moves."""
+        solutions = set() #positions of all best next steps 
+        value = -100 #value of a step, the higher the better for the computer
+        for nx in tsumeru : #every possible postion for the next step
+            v = self.__findMin(nx, 1, value) #get the value of this step
+            if value == v : #same value to old solutions, add to set
+                solutions.add((nx.index(1), nx.index(3)))
+            elif value < v : #find a better solution, clear old solutions and add new one
+                solutions.clear()
+                solutions.add((nx.index(1), nx.index(3)))
+                value = v
+
+        self._log.debug("Solutions: %s, Value: %d", str(solutions), value)
+        #randomly choose one of the best solutions if there are multiple ones
+        return list(solutions)[random.randint(0, len(solutions) - 1)]
 
     def __findMin(self, tsumeru, depth: int, MAX: int) -> int :
         """Find the minimum value of the next step
