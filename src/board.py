@@ -105,7 +105,7 @@ def expandBoard(pos:tuple) -> tuple:
 
     biggest = max(pos)
     ret = [] #list of possible next states, without duplicates
-    for i in range(0, 9) :
+    for i in range(9) :
         if pos[i] == 0 : #this position is empty, can be played
             tmp = list(pos)
             tmp[i] = biggest + 1
