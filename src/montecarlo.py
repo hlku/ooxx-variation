@@ -14,7 +14,9 @@ class MonteCarlo(engine.Engine):
     def calculate(self) -> int:
         """Calculate the best next step using the Monte Carlo Algorithm."""
         optimization = self._optimizeStep(self._board.getBoard()) #quick solve 
-        if optimization[0] != 0: return optimization[1]
+        if optimization[0] != 0: 
+            self._log.debug("Found a optimized step: %d, Type: %d", optimization[1], optimization[0])
+            return optimization[1]
 
         solutions = [0] * 9 #the score of each possible next step
         illegal = [i for i in range(9)]

@@ -16,7 +16,7 @@ class Engine:
             self._log.setLevel(logging.DEBUG)
             self._log.debug('Debug mode is on')
 
-    def _optimizeStep(self, tsumeru) -> tuple:
+    def _optimizeStep(self, tsumeru:tuple) -> tuple:
         """Optimize calculating step, don't use engine when it's too easy.
            return 1 for immediately winning,
            return 2 for avoiding immediately losing,

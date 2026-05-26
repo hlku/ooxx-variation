@@ -11,7 +11,9 @@ class AlphaBeta(engine.Engine):
     def calculate(self) -> int:
         """Calculate the best next step using the Alpha–Beta Pruning Algorithm."""
         optimization = self._optimizeStep(self._board.getBoard()) #quick solve 
-        if optimization[0] != 0: return optimization[1]
+        if optimization[0] != 0:
+            self._log.debug("Found a optimized step: %d, Type: %d", optimization[1], optimization[0])
+            return optimization[1]
 
         solutions = set() #positions of all best next steps 
         value = -100 #value of a step, the higher the better for the computer
