@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import logging, random
-import settings, alphabeta, montecarlo, board
+from . import settings, alphabeta, montecarlo, board
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class OOXX:

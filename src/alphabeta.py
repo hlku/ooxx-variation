@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import logging, random
-import board
+from . import board
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class AlphaBeta:

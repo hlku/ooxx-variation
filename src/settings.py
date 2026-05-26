@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
-import logging, sys, yaml
-from typing import Any
+import logging, yaml
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class Settings:

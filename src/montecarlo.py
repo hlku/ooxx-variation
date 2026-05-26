@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
-import random, sys, operator, logging
-import board
+import random, logging
+from . import board
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class MonteCarlo:
