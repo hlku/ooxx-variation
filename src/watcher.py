@@ -11,8 +11,8 @@ class Watcher:
 
     def start(self) -> None:
         self.__child = os.fork()
-        if self.__child == 0 : return
-        else: self.__watch()
+        if self.__child == 0 : return #the child process do the ooxx game main part
+        else: self.__watch() #the parent process becomes daemon for watching Ctrl+c
 
     def __watch(self):
         try: os.wait()
