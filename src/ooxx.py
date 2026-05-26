@@ -28,6 +28,10 @@ class OOXX:
 
         self.__mode = self.__getMode()
         match self.__mode:
+            ####TODO
+            ####computer starts with 2 steps is not optimized,
+            ####should design as computer thinking 2 steps together,
+            ####instead of thinking 2 steps independently.
             case 2 | 4: self.__board.playStep(self.__engine.calculate()) #computer goes first 
             case _: pass
         if self.__mode == 4 : #computer starts with 2 steps

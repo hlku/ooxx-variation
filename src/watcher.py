@@ -1,4 +1,7 @@
 # -*- coding: UTF-8 -*-
+####TODO:
+####the Watcher can only run on UNIX-like system
+####need to find a cross-platform solution for Windows.
 import os, sys, signal, logging
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
