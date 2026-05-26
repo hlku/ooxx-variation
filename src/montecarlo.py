@@ -11,13 +11,17 @@ class MonteCarlo(engine.Engine):
         #number of simulations for each random possible next step, the higher the more accurate, but more time computing
         self.__limit = self._settings.getConfig('mctimes')
 
-    def _engineCalculate(self, times:int) -> int:
+    def __coreCalculate(self, tsumeru:tuple=None) -> dict:
         """Calculate the best next step using the Monte Carlo Algorithm."""
-        solutions = [0] * 9 #the score of each possible next step
-        illegal = [i for i in range(9)]
-        for nx in self._board.expand(times) : #every possible postion for the next step
-            pos = nx.index(max(nx))
-            illegal.remove(pos) #legal step, remove from illegal list
+        solutions = {} #the score of each possible next step
+        isOneStep = False
+        if tsumeru is None : #from _engineCalculate()
+            isOneStep = True
+            tsumeru = self._board.expand() 
+        for nx in tsumeru : #every possible postion for the next step
+            if isOneStep : pos = nx.index(max(nx)) #from _engineCalculate()
+            else : pos = (nx.index(1), nx.index(3)) #from _engineCalculate2()
+            solutions[pos] = 0
             for _ in range(self.__limit) : #Do MC for limit times
                 clone = list(nx) #don't touch the nx 
                 for rd in range(self._depth) : #searching until reach the depth
@@ -34,17 +38,25 @@ class MonteCarlo(engine.Engine):
                     nxlist = board.expandBoard(clone) #keep expanding the board until reach the depth or win/lose
                     clone = nxlist[random.randint(0, len(nxlist) - 1)] #MC's spirit, random choose a next step
 
-        for i in illegal : #avoid illegal steps
-            solutions[i] = self._depth * self.__limit * - 10
+        return solutions
 
-        self.__showScore(solutions)
-        return solutions.index(max(solutions))
+    def _engineCalculate(self) -> int:
+        """Calculate the best next step."""
+        solutions = self.__coreCalculate()
+        self.__showScore(solutions) #debug
+        return max(solutions, key=solutions.get)
     
-    def __showScore(self, solutions:list) -> None:
+    def _engineCalculate2(self, tsumeru: tuple) -> tuple :
+        """Calculate the best 1st, 3rd steps if computer starts with 2 moves."""
+        solutions = self.__coreCalculate(tsumeru)
+        self.__showScore2(solutions) #debug
+        return max(solutions, key=solutions.get)
+    
+    def __showScore(self, solutions:dict) -> None:
         """Get the score of each possible next step."""
         msg='Score of next steps:\n'
         for i in range(9):
-            score = solutions[i]
+            score = solutions.get(i, -10 * self.__limit * self._depth)
             winRate = float(score + self.__limit * self._depth)/float(self.__limit * self._depth * 2)
             winRateStr = "%0.3f" % winRate
             if score <= -10 * self.__limit * self._depth : color = '\033[0;30m'
@@ -53,4 +65,21 @@ class MonteCarlo(engine.Engine):
             else : color = '\033[1;36m'
             msg += str(i+1) + ':' + color + winRateStr + " \033[0m\t"
             if i % 3 == 2: msg += '\n'
+        self._log.debug(msg)
+
+    def __showScore2(self, solutions:dict) -> None:
+        """Get the score of each possible next 2 steps."""
+        msg='Score of next 2 steps:\n'
+        i = 0
+        for position, score in solutions.items():
+            i += 1
+            winRate = float(score + self.__limit * self._depth)/float(self.__limit * self._depth * 2)
+            winRateStr = "%0.3f" % winRate
+            if score <= -10 * self.__limit * self._depth : color = '\033[0;30m'
+            elif score < -1 * self.__limit * self._depth : color = '\033[1;31m'
+            elif score < 0 : color = '\033[1;32m'
+            else : color = '\033[1;36m'
+            msg += "(%d, %d)" % (position[0]+1, position[1]+1)
+            msg += ':' + color + winRateStr + " \033[0m\t"
+            if i % 3 == 0: msg += '\n'
         self._log.debug(msg)
