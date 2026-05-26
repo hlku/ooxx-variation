@@ -21,7 +21,7 @@ class OOXX:
             self.__engine = alphabeta.AlphaBeta(self.__settings, self.__board)
         
 
-    def start(self) -> None:
+    def start(self) -> bool:
         """Start the game loop."""
         self.__log.info('game started')
         self.__board.clear()
@@ -52,6 +52,7 @@ class OOXX:
             if self.__checkStatus("You"): break
 
             self.__board.playStep(self.__engine.calculate()) #computer's turn
+        return self.__newGame()
             
     def __getMode(self) -> int:
         """Get the mode of the game from user input."""
@@ -85,7 +86,6 @@ class OOXX:
                 continue
             return i
 
-
     def __checkStatus(self, player:str) -> bool:
         """Check whether the game has ended."""
         if self.__board.check():
@@ -95,4 +95,12 @@ class OOXX:
             print('====== Tie! ======\n\n')
             return True
         else: return False #game continues
+
+    def __newGame(self) -> bool:
+        """Ask the user whether to start a new game."""
+        while True:
+            i = input('Start a new game? (y/n) : ')
+            if i == 'Y' or i == 'y' or i == 'yes': return True
+            elif i == 'N' or i == 'n' or i == 'no': return False
+            else: print('Error input!')
         
