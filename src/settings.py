@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
-import logging, yaml
-import typing
+import logging, typing, yaml
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class Settings:
@@ -11,18 +10,18 @@ class Settings:
         try:
             with open('conf/config.yml"', 'r') as stream:
                 self.__data = yaml.full_load(stream)
-            self.check()
+            self.__check()
         except OSError:
             self.__log.error('config.yml open failed')
-            self.setDefault()
+            self.__setDefault()
         except yaml.YAMLError:
             self.__log.error('config.yml format error')
-            self.setDefault()
+            self.__setDefault()
         except:
             self.__log.error('config.yml read failed')
-            self.setDefault()
+            self.__setDefault()
     
-    def setDefault(self) -> None:
+    def __setDefault(self) -> None:
         """If the yaml file read fails, set default values."""
         self.__data = {
             'engine': 'AlphaBeta',
@@ -32,13 +31,13 @@ class Settings:
             'debug': False
         }
 
-    def check(self):
+    def __check(self):
         """Check the settings for validity.
         If any setting is invalid, log an error, and use default value."""
 
         if self.__data is None: 
             self.__log.error('config.yml is empty')
-            self.setDefault()
+            self.__setDefault()
             return
 
         engine = self.getConfig('engine')
