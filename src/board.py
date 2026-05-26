@@ -100,6 +100,20 @@ def checkWin(pos:tuple) -> bool:
        k(1, 4, 7) or k(2, 5, 8) or k(0, 4, 8) or k(2, 4, 6) : return True
     return False
 
+def checkmate(pos:tuple) -> bool:
+    """Check whether someone is in checkmate situation:
+       A special situation that will win in 3 steps instead of 1 step.
+       A line consists N, N+3, N+5, which the N side will lose in 3 steps"""
+    def checkLine(a, b, c) -> bool:
+        """Check whether a line of three steps is in the form of N, N+3, N+5."""
+        oldest = min(pos[a], pos[b], pos[c])
+        return sorted([pos[a] - oldest, pos[b] - oldest, pos[c] - oldest]) == [0, 3, 5]
+    
+    if checkLine(0, 1, 2) or checkLine(3, 4, 5) or checkLine(6, 7, 8) or \
+       checkLine(0, 3, 6) or checkLine(1, 4, 7) or checkLine(2, 5, 8) or \
+       checkLine(0, 4, 8) or checkLine(2, 4, 6) : return True
+    return False
+
 def expandBoard(pos:tuple) -> tuple:
     """Expand the pos's state to all possible next states and remove duplicates."""
     def rotate(t) : #rotate the board 90 degrees clockwise
