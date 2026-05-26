@@ -31,7 +31,7 @@ class OOXX:
             case 2 | 4: self.__board.playStep(self.__engine.calculate()) #computer goes first 
             case _: pass
         if self.__mode == 4 : #computer starts with 2 steps
-            self.__board.playStep(self.__engine.calculate(), 2)
+            self.__board.playStep(self.__engine.calculate(2), 2)
 
         while True:
             self.__board.display()

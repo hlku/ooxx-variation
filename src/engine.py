@@ -39,14 +39,16 @@ class Engine:
             ret = (0, 0)
         return ret
 
-    def calculate(self) :
+    def calculate(self, times:int=1) -> int:
         """Calculate the best next step."""
+        if times != 1: return self._engineCalculate(times) #optimization only for the 1 step
+
         optimization = self._optimizeStep(self._board.getBoard()) #quick solve 
         if optimization[0] != 0:
             self._log.debug("Found a optimized step: %d, Type: %d", optimization[1], optimization[0])
             return optimization[1]        
-        return self._engineCalculate() #call the real calculating method implemented by subclasses
+        return self._engineCalculate(times) #call the real calculating method implemented by subclasses
     
-    def _engineCalculate(self) : #virtual method, should be implemented by subclasses
+    def _engineCalculate(self, times:int) : #virtual method, should be implemented by subclasses
         """Calculate the best next step by the engine."""
         pass

@@ -11,11 +11,11 @@ class MonteCarlo(engine.Engine):
         #number of simulations for each random possible next step, the higher the more accurate, but more time computing
         self.__limit = self._settings.getConfig('mctimes')
 
-    def _engineCalculate(self) -> int:
+    def _engineCalculate(self, times:int) -> int:
         """Calculate the best next step using the Monte Carlo Algorithm."""
         solutions = [0] * 9 #the score of each possible next step
         illegal = [i for i in range(9)]
-        for nx in self._board.expand() : #every possible postion for the next step
+        for nx in self._board.expand(times) : #every possible postion for the next step
             pos = nx.index(max(nx))
             illegal.remove(pos) #legal step, remove from illegal list
             for _ in range(self.__limit) : #Do MC for limit times

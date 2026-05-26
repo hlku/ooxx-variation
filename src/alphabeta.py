@@ -8,11 +8,11 @@ class AlphaBeta(engine.Engine):
         """Initialize the AlphaBeta engine based on the settings."""
         super().__init__(settings, board)
     
-    def _engineCalculate(self) -> int:
+    def _engineCalculate(self, times:int) -> int:
         """Calculate the best next step using the Alpha–Beta Pruning Algorithm."""
         solutions = set() #positions of all best next steps 
         value = -100 #value of a step, the higher the better for the computer
-        for nx in self._board.expand() : #every possible postion for the next step
+        for nx in self._board.expand(times) : #every possible postion for the next step
             v = self.__findMin(nx, 1, value) #get the value of this step
             if value == v : #same value to old solutions, add to set
                 solutions.add(nx.index(max(nx)))
