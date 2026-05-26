@@ -31,10 +31,12 @@ class Engine:
                 ret = (3, nx.index(max(nx)))
         for nx in nextStates: #if no immediately winning step, find immediately losing step to avoid
             for nx2 in board.expandBoard(nx):
-                if board.checkWin(nx2): return (2, nx2.index(max(nx2)))
+                if board.checkWin(nx2): ret = (2, nx2.index(max(nx2)))
                 if board.checkmate(nx2) and ret[0] == 0:
                     ret = (4, nx2.index(max(nx2)))
 
+        if ret[1] != 0 and tsumeru[ret[1]] != 0: #the optimized step is illegal, ignore it
+            ret = (0, 0)
         return ret
 
     def calculate(self) : #virtual method, to be implemented by subclasses
