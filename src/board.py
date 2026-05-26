@@ -13,6 +13,10 @@ class Board:
             self.__log.setLevel(logging.DEBUG)
             self.__log.debug('Debug mode is on')
 
+    def clear(self) -> None:
+        """Clear the board."""
+        self.__board = [0] * 9
+
     def __fresh(self) -> None:
         """fresh the board."""
         freshBoard(self.__board)

@@ -24,6 +24,7 @@ class OOXX:
     def start(self) -> None:
         """Start the game loop."""
         self.__log.info('game started')
+        self.__board.clear()
 
         self.__mode = self.__getMode()
         match self.__mode:
@@ -88,10 +89,10 @@ class OOXX:
     def __checkStatus(self, player:str) -> bool:
         """Check whether the game has ended."""
         if self.__board.check():
-            print('====== %s won! ======' % player)
+            print('====== %s won! ======\n\n' % player)
             return True
         elif self.__board.getMaxStep() >= 50 : 
-            print('====== Tie! ======')
+            print('====== Tie! ======\n\n')
             return True
         else: return False #game continues
         
