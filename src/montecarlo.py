@@ -39,8 +39,8 @@ class MonteCarlo:
                     nxlist = board.expandBoard(clone) #keep expanding the board until reach the depth or win/lose
                     clone = nxlist[random.randint(0, len(nxlist) - 1)] #MC's spirit, random choose a next step
 
-        for i in range(9) : #avoid illegal steps, should not happen, but just in case
-            if self.__board.getBoard()[i] != 0 : solutions[i] = 0
+        for i in range(9) : #avoid illegal steps
+            if self.__board.getBoard()[i] != 0 : solutions[i] = self.__depth * self.__limit * - 10
 
         self.__showScore(solutions)
         return solutions.index(max(solutions))
