@@ -6,7 +6,7 @@ import os, sys, signal, logging
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class Watcher:
-    def __init__(self) -> None:        
+    def __init__(self) -> None:
         self.__log = logging.getLogger(__name__)
 
     def start(self) -> None:
@@ -17,11 +17,12 @@ class Watcher:
     def __watch(self):
         try: os.wait()
         except KeyboardInterrupt:
-            self.__log.info("Ctrl-c received! Sending kill to threads.")
+            self.__log.info("Ctrl-c received! Sending kill to processes.")
             self.__kill()
         sys.exit()
 
     def __kill(self) -> None:
         try: os.kill(self.__child, signal.SIGKILL)
-        except OSError: pass
+        except OSError:
+            self.__log.error("Kill processes failed!")
 
