@@ -38,17 +38,38 @@ class Engine:
         if ret[1] != 0 and tsumeru[ret[1]] != 0: #the optimized step is illegal, ignore it
             ret = (0, 0)
         return ret
+    
+    def _engineCalculate(self) -> int : #virtual method, should be implemented by subclasses
+        """Calculate the best next step by the engine."""
+        pass
 
-    def calculate(self, times:int=1) -> int:
+    def _engineCalculate2(self, tsumeru: tuple) -> tuple : #virtual method, should be implemented by subclasses
+        """Calculate the best 1st, 3rd steps by the engine."""
+        pass
+
+    def calculate(self) -> int:
         """Calculate the best next step."""
-        if times != 1: return self._engineCalculate(times) #optimization only for the 1 step
-
         optimization = self._optimizeStep(self._board.getBoard()) #quick solve 
         if optimization[0] != 0:
             self._log.debug("Found a optimized step: %d, Type: %d", optimization[1], optimization[0])
             return optimization[1]        
-        return self._engineCalculate(times) #call the real calculating method implemented by subclasses
+        return self._engineCalculate() #call the real calculating method implemented by subclasses
     
-    def _engineCalculate(self, times:int) : #virtual method, should be implemented by subclasses
-        """Calculate the best next step by the engine."""
-        pass
+    def calculate2(self) -> tuple : #virtual method, should be implemented by subclasses
+        """Calculate the best 1st, 3rd steps if computer starts with 2 moves."""
+        expandedBoard = ( #don't waste time to use expandBoard function because only 2 steps
+            (1, 3, 0, 0, 0, 0, 0, 0, 0),
+            (1, 0, 3, 0, 0, 0, 0, 0, 0),
+            (1, 0, 0, 0, 3, 0, 0, 0, 0),
+            (1, 0, 0, 0, 0, 3, 0, 0, 0),
+            (1, 0, 0, 0, 0, 0, 0, 0, 3),
+            (0, 1, 3, 0, 0, 0, 0, 0, 0),
+            (0, 1, 0, 0, 3, 0, 0, 0, 0),
+            (0, 1, 0, 0, 0, 3, 0, 0, 0),
+            (0, 1, 0, 0, 0, 0, 0, 3, 0),
+            (0, 1, 0, 0, 0, 0, 0, 0, 3),
+            (3, 0, 0, 0, 1, 0, 0, 0, 0),
+            (0, 3, 0, 0, 1, 0, 0, 0, 0)
+        )
+        return self._engineCalculate2(expandedBoard)
+        

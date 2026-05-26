@@ -25,16 +25,17 @@ class Board:
         """Check whether the current board has a winner."""
         return checkWin(tuple(self.__board))
     
-    def expand(self, times:int=1) -> tuple:
+    def expand(self) -> tuple:
         """Expand the current board state to all possible next states and remove duplicates."""
-        return expandBoard(tuple(self.__board), times)
+        return expandBoard(tuple(self.__board))
 
     def playStep(self, step:int, times:int=1) -> None:
         """Play a step on the board.
         step: the position to play, from 0 to 8
         times: the next step offset, 1 or 2"""
-        self.__board[step] = max(self.__board) + times 
-        self.__fresh()
+        self.__board[step] = max(self.__board) + times
+        #times=2 means starting with 2 steps, no need to fresh because there are only 2 steps
+        if times == 1 : self.__fresh() 
 
     def display(self) -> None:
         """Display the board based with the display mode."""
@@ -115,7 +116,7 @@ def checkmate(pos:tuple) -> bool:
        checkLine(0, 4, 8) or checkLine(2, 4, 6) : return True
     return False
 
-def expandBoard(pos:tuple, times:int=1) -> tuple:
+def expandBoard(pos:tuple) -> tuple:
     """Expand the pos's state to all possible next states and remove duplicates."""
     def rotate(t) : #rotate the board 90 degrees clockwise
         return [t[6], t[3], t[0], t[7], t[4], t[1], t[8], t[5], t[2]]
@@ -127,7 +128,7 @@ def expandBoard(pos:tuple, times:int=1) -> tuple:
     for i in range(9) :
         if pos[i] == 0 : #this position is empty, can be played
             tmp = list(pos)
-            tmp[i] = biggest + times
+            tmp[i] = biggest + 1
             freshBoard(tmp)
             if tmp.count(0) > 3 : #duplicate states only exist when there are more than 3 empty positions
                 if rotate(tmp) in ret or \

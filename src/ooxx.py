@@ -28,14 +28,12 @@ class OOXX:
 
         self.__mode = self.__getMode()
         match self.__mode:
-            ####TODO
-            ####computer starts with 2 steps is not optimized,
-            ####should design as computer thinking 2 steps together,
-            ####instead of thinking 2 steps independently.
-            case 2 | 4: self.__board.playStep(self.__engine.calculate()) #computer goes first 
+            case 2 : self.__board.playStep(self.__engine.calculate()) #computer goes first 
+            case 4 : #computer starts with 2 steps
+                steps = self.__engine.calculate2()
+                self.__board.playStep(steps[0])
+                self.__board.playStep(steps[1], 2)
             case _: pass
-        if self.__mode == 4 : #computer starts with 2 steps
-            self.__board.playStep(self.__engine.calculate(2), 2)
 
         while True:
             self.__board.display()
