@@ -12,7 +12,7 @@ class AlphaBeta(engine.Engine):
         """Calculate the best next step using the Alpha–Beta Pruning Algorithm."""
         solutions = set() #positions of all best next steps 
         value = -100 #value of a step, the higher the better for the computer
-        for nx in self.__board.expand() : #every possible postion for the next step
+        for nx in self._board.expand() : #every possible postion for the next step
             v = self.__findMin(nx, 1, value) #get the value of this step
             if value == v : #same value to old solutions, add to set
                 solutions.add(nx.index(max(nx)))
@@ -20,7 +20,7 @@ class AlphaBeta(engine.Engine):
                 solutions = set([nx.index(max(nx))])
                 value = v
 
-        self.__log.debug("Solutions: %s, Value: %d", str(solutions), value)
+        self._log.debug("Solutions: %s, Value: %d", str(solutions), value)
         #randomly choose one of the best solutions if there are multiple ones
         return list(solutions)[random.randint(0, len(solutions) - 1)] 
 
@@ -31,7 +31,7 @@ class AlphaBeta(engine.Engine):
            depth: the current depth of the search tree
            MAX: the current best value of computer's possible next steps"""
         if board.checkWin(tsumeru) : return 99 - depth #computer win, the sooner the better
-        elif depth >= self.__depth : return 0 #reach the depth limit, no best solution found
+        elif depth >= self._depth : return 0 #reach the depth limit, no best solution found
         
         value = 100
         for nx in board.expandBoard(tsumeru) : #every possible postion for user's next step
@@ -50,7 +50,7 @@ class AlphaBeta(engine.Engine):
            depth: the current depth of the search tree
            MIN: the current best value of user's possible next steps"""
         if board.checkWin(tsumeru) : return -99 + depth #user win, the sooner the worse
-        elif depth >= self.__depth : return 0 #reach the depth limit, no best solution found
+        elif depth >= self._depth : return 0 #reach the depth limit, no best solution found
         
         value = -100
         for nx in board.expandBoard(tsumeru) : #every possible postion for computer's next step
