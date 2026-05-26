@@ -8,7 +8,7 @@ class Settings:
         """Initialize the settings by reading the config.yml file."""
         self.__log = logging.getLogger(__name__)
         try:
-            with open('conf/config.yml"', 'r') as stream:
+            with open('conf/config.yml', 'r') as stream:
                 self.__data = yaml.full_load(stream)
             self.__check()
         except OSError:
