@@ -8,9 +8,9 @@ class Watcher:
 
     def start(self) -> None:
         """start a multiprocess watcher,
-           child process catches keyboard interrupt and kills the process
+           child process catches keyboard interrupt and kills all processes
            parent do nothing, just return to __main___ to do game"""
-        #fork is only available on Unix. using spawan can run on both Unix and Windows
+        #fork is only available on Unix. using spawn can run on both Unix and Windows
         multiprocessing.set_start_method('spawn')
 
         #new process, child do watching, parent go game
