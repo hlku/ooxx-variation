@@ -1,24 +1,17 @@
 # -*- coding: UTF-8 -*-
 import random, logging
-from . import board
+from . import board, engine
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
-class MonteCarlo:
+class MonteCarlo(engine.Engine):
     def __init__(self, settings, board) -> None:
         """Initialize the AlphaBeta engine based on the settings."""
-        self.__settings = settings
-        self.__board = board
-        #search depth limit, the higher the smarter computer, but more time computing
-        self.__depth = 3 + self.__settings.getConfig('level') * 2 
+        super().__init__(settings, board)
+
         #number of simulations for each random possible next step, the higher the more accurate, but more time computing
         self.__limit = self.__settings.getConfig('mctimes')
-        
-        self.__log = logging.getLogger(__name__)
-        if self.__settings.getConfig('debug'):
-            self.__log.setLevel(logging.DEBUG)
-            self.__log.debug('Debug mode is on')
 
-    def calculate(self):
+    def calculate(self) -> int:
         """Calculate the best next step using the Monte Carlo Algorithm."""
         solutions = [0] * 9 #the score of each possible next step
         illegal = [i for i in range(9)]

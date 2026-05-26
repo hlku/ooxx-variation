@@ -1,22 +1,14 @@
 # -*- coding: UTF-8 -*-
 import logging, random
-from . import board
+from . import board, engine
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
-class AlphaBeta:
+class AlphaBeta(engine.Engine):
     def __init__(self, settings, board) -> None:
         """Initialize the AlphaBeta engine based on the settings."""
-        self.__settings = settings
-        self.__board = board
-        #search depth limit, the higher the smarter computer, but more time computing
-        self.__depth = 3 + self.__settings.getConfig('level') * 2 
-        
-        self.__log = logging.getLogger(__name__)
-        if self.__settings.getConfig('debug'):
-            self.__log.setLevel(logging.DEBUG)
-            self.__log.debug('Debug mode is on')
+        super().__init__(settings, board)
     
-    def calculate(self):
+    def calculate(self) -> int:
         """Calculate the best next step using the Alpha–Beta Pruning Algorithm."""
         solutions = set() #positions of all best next steps 
         value = -100 #value of a step, the higher the better for the computer
@@ -32,7 +24,7 @@ class AlphaBeta:
         #randomly choose one of the best solutions if there are multiple ones
         return list(solutions)[random.randint(0, len(solutions) - 1)] 
 
-    def __findMin(self, tsumeru, depth, MAX):
+    def __findMin(self, tsumeru, depth: int, MAX: int) -> int :
         """Find the minimum value of the next step
            which is best for user but worst for computer.
            tsumeru: the pending solving board state after computer's step
@@ -51,7 +43,7 @@ class AlphaBeta:
             
         return value
         
-    def __findMax(self, tsumeru, depth, MIN) :
+    def __findMax(self, tsumeru, depth: int, MIN: int) -> int :
         """Find the maximum value of the next step
            which is best for computer but worst for user.
            tsumeru: the pending solving board state after user's step
