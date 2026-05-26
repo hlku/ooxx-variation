@@ -58,6 +58,6 @@ class MonteCarlo:
             elif score < -1 * self.__limit * self.__depth : color = '\033[1;31m'
             elif score < 0 : color = '\033[1;32m'
             else : color = '\033[1;36m'
-            msg += str(i+1) + ':' + color + winRateStr + "\033[0m\t"
+            msg += str(i+1) + ':' + color + winRateStr + " \033[0m\t"
             if i % 3 == 2: msg += '\n'
         self.__log.debug(msg)
