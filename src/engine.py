@@ -72,4 +72,3 @@ class Engine:
             (0, 3, 0, 0, 1, 0, 0, 0, 0)
         )
         return self._engineCalculate2(expandedBoard)
-        

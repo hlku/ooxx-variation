@@ -105,4 +105,3 @@ class OOXX:
             if i == 'Y' or i == 'y' or i == 'yes': return True
             elif i == 'N' or i == 'n' or i == 'no': return False
             else: print('Error input!')
-        

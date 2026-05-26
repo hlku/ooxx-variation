@@ -79,4 +79,3 @@ class AlphaBeta(engine.Engine):
             if value > MIN : return value
             
         return value
-    
