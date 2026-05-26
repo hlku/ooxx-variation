@@ -42,7 +42,7 @@ class MonteCarlo:
         for i in range(9) : #avoid illegal steps, should not happen, but just in case
             if self.__board.getBoard()[i] != 0 : solutions[i] = 0
 
-        self.__showScore(solutions))
+        self.__showScore(solutions)
         return solutions.index(max(solutions))
     
     def __showScore(self, solutions:list) -> None:
