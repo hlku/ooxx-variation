@@ -1,8 +1,5 @@
 # -*- coding: UTF-8 -*-
-####TODO:
-####the Watcher can only run on UNIX-like system
-####need to find a cross-platform solution for Windows.
-import os, sys, signal, logging
+import logging, multiprocessing, time, sys, os, signal
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class Watcher:
@@ -10,19 +7,37 @@ class Watcher:
         self.__log = logging.getLogger(__name__)
 
     def start(self) -> None:
-        self.__child = os.fork()
-        if self.__child == 0 : return #the child process do the ooxx game main part
-        else: self.__watch() #the parent process becomes daemon for watching Ctrl+c
+        """start a multiprocess watcher,
+           child process catches keyboard interrupt and kills the process
+           parent do nothing, just return to __main___ to do game"""
+        #fork is only available on Unix. using spawan can run on both Unix and Windows
+        multiprocessing.set_start_method('spawn')
 
-    def __watch(self):
-        try: os.wait()
+        #new process, child do watching, parent go game
+        child = multiprocessing.Process(target = self.watch, name = "Watcher", daemon = True)
+        child.start()
+        #parent process will reach here and return to __main__ to do game
+
+    def watch(self):
+        """child process do watching, if receive keyboard interrupt, kill all processes
+           can't write as __watch, because multiprocessing class can't see it"""
+        try:
+            while True: time.sleep(1) #do nothing, just wait for keyboard interrupt
         except KeyboardInterrupt:
-            self.__log.info("Ctrl-c received! Sending kill to processes.")
+            self.__log.info("Ctrl-c received! Sending kill to parent process.")
             self.__kill()
-        sys.exit()
+        except Exception as e:
+            self.__log.warning("Unexpected error: %s", e)
 
     def __kill(self) -> None:
-        try: os.kill(self.__child, signal.SIGKILL)
-        except OSError:
-            self.__log.error("Kill processes failed!")
-
+        """force kill all processes"""
+        try:
+            parent = multiprocessing.parent_process() #get parent process
+            self.__log.debug("Parent process: %s", str(parent.pid))
+            os.kill(parent.pid, signal.SIGTERM) #ask parent process normally terminate
+            if parent.is_alive() and hasattr(signal, 'SIGKILL'): #only UNIX has SIGKILL
+                os.kill(parent.pid, signal.SIGKILL) #can't normally terminate, force kill
+        except Exception as e:
+            self.__log.error("Kill parent process failed: %s", e)
+        finally:
+            sys.exit(0) #after killing parent process, suiciding
