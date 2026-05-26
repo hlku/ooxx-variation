@@ -106,6 +106,7 @@ def checkmate(pos:tuple) -> bool:
        A line consists N, N+3, N+5, which the N side will lose in 3 steps"""
     def checkLine(a, b, c) -> bool:
         """Check whether a line of three steps is in the form of N, N+3, N+5."""
+        if pos[a] == 0 or pos[b] == 0 or pos[c] == 0 : return False #contains empty position, not checkmate
         oldest = min(pos[a], pos[b], pos[c])
         return sorted([pos[a] - oldest, pos[b] - oldest, pos[c] - oldest]) == [0, 3, 5]
     
