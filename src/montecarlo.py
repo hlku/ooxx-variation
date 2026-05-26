@@ -21,8 +21,10 @@ class MonteCarlo:
     def calculate(self):
         """Calculate the best next step using the Monte Carlo Algorithm."""
         solutions = [0] * 9 #the score of each possible next step
+        illegal = [i for i in range(9)]
         for nx in self.__board.expand() : #every possible postion for the next step
             pos = nx.index(max(nx))
+            illegal.remove(pos) #legal step, remove from illegal list
             for _ in range(self.__limit) : #Do MC for limit times
                 clone = list(nx) #don't touch the nx 
                 for rd in range(self.__depth) : #searching until reach the depth
@@ -39,8 +41,8 @@ class MonteCarlo:
                     nxlist = board.expandBoard(clone) #keep expanding the board until reach the depth or win/lose
                     clone = nxlist[random.randint(0, len(nxlist) - 1)] #MC's spirit, random choose a next step
 
-        for i in range(9) : #avoid illegal steps
-            if self.__board.getBoard()[i] != 0 : solutions[i] = self.__depth * self.__limit * - 10
+        for i in illegal : #avoid illegal steps
+            solutions[i] = self.__depth * self.__limit * - 10
 
         self.__showScore(solutions)
         return solutions.index(max(solutions))
@@ -56,6 +58,6 @@ class MonteCarlo:
             elif score < -1 * self.__limit * self.__depth : color = '\033[1;31m'
             elif score < 0 : color = '\033[1;32m'
             else : color = '\033[1;36m'
-            msg += str(i+1) + ':' + color + winRateStr + "%\033[0m\t"
+            msg += str(i+1) + ':' + color + winRateStr + "\033[0m\t"
             if i % 3 == 2: msg += '\n'
         self.__log.debug(msg)
