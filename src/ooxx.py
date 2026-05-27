@@ -17,7 +17,7 @@ class OOXX:
 
         if self.__settings.getConfig('engine') == 'MonteCarlo':
             self.__engine = montecarlo.MonteCarlo(self.__settings, self.__board)
-        elif self.__settings.getConfig('engine') == 'AlphaBeta':
+        else: #default to AlphaBeta
             self.__engine = alphabeta.AlphaBeta(self.__settings, self.__board)
         
 

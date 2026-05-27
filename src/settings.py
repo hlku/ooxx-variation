@@ -31,7 +31,7 @@ class Settings:
             'debug': False
         }
 
-    def __check(self):
+    def __check(self) -> None:
         """Check the settings for validity.
         If any setting is invalid, log an error, and use default value."""
 

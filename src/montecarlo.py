@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 import random, logging
-from . import board, engine
+from . import board, engine, settings
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class MonteCarlo(engine.Engine):
-    def __init__(self, settings, board) -> None:
+    def __init__(self, settings:settings.Settings, board:board.Board) -> None:
         """Initialize the MonteCarlo engine based on the settings."""
         super().__init__(settings, board)
 
@@ -23,7 +23,7 @@ class MonteCarlo(engine.Engine):
             else : pos = (nx.index(1), nx.index(3)) #from _engineCalculate2()
             solutions[pos] = 0
             for _ in range(self.__limit) : #Do MC for limit times
-                clone = list(nx) #don't touch the nx 
+                clone = nx #don't touch the nx 
                 for rd in range(self._depth) : #searching until reach the depth
                     if board.checkWin(clone):
                         if rd % 2 == 0 : #win
@@ -46,7 +46,7 @@ class MonteCarlo(engine.Engine):
         self.__showScore(solutions) #debug
         return max(solutions, key=solutions.get)
     
-    def _engineCalculate2(self, tsumeru: tuple) -> tuple :
+    def _engineCalculate2(self, tsumeru:tuple) -> tuple :
         """Calculate the best 1st, 3rd steps if computer starts with 2 moves."""
         solutions = self.__coreCalculate(tsumeru)
         self.__showScore2(solutions) #debug

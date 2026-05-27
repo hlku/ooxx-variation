@@ -4,6 +4,7 @@ import logging, multiprocessing, time, sys, os, signal
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class Watcher:
     def __init__(self) -> None:
+        """init with a logger"""
         self.__log = logging.getLogger(__name__)
 
     def start(self) -> None:
@@ -18,9 +19,8 @@ class Watcher:
         child.start()
         #parent process will reach here and return to __main__ to do game
 
-    def watch(self):
-        """child process do watching, if receive keyboard interrupt, kill all processes
-           can't write as __watch, because multiprocessing class can't see it"""
+    def watch(self): #can't write as __watch, because multiprocessing class can't see it
+        """child process do watching, if receive keyboard interrupt, kill all processes"""
         try:
             while True: time.sleep(1) #do nothing, just wait for keyboard interrupt
         except KeyboardInterrupt:

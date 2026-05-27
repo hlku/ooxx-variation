@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-import sys
 import src.ooxx, src.watcher
 
 if __name__ == '__main__':

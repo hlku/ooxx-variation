@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 import logging
-from . import board
+from . import board, settings
 
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 class Engine:
-    def __init__(self, settings, board) -> None:
+    def __init__(self, settings:settings.Settings, board:board.Board) -> None:
         """Initialize the engine based on the settings."""
         self._settings = settings
         self._board = board

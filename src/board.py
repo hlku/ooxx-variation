@@ -1,9 +1,10 @@
 # -*- coding: UTF-8 -*-
 import logging
+from . import settings
 logging.basicConfig(level=logging.INFO, format = "%(asctime)s %(filename)s %(levelname)s:%(message)s")
 
 class Board:
-    def __init__(self, settings) -> None:
+    def __init__(self, settings:settings.Settings) -> None:
         """Initialize the board based on the settings."""
         self.__settings = settings
         self.__board = [0] * 9
@@ -138,6 +139,6 @@ def expandBoard(pos:tuple) -> tuple:
                    mirror(rotate(tmp)) in ret or \
                    mirror(rotate(rotate(tmp))) in ret or \
                    mirror(rotate(rotate(rotate(tmp)))) in ret : pass
-                else : ret.append(tmp)
-            else : ret.append(tmp)
+                else : ret.append(tuple(tmp))
+            else : ret.append(tuple(tmp))
     return tuple(ret)
