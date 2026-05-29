@@ -89,8 +89,7 @@ def freshBoard(pos:list) -> None:
     """Game rules: at most 3 steps of one side can be on the board, remove the oldest step."""
     oldest = max(pos) - 6
     if oldest <= 0: return #no step needs to be removed
-    for i in range(9):
-        if pos[i] == oldest: pos[i] = 0
+    pos[pos.index(oldest)] = 0
 
 def checkWin(pos:tuple) -> bool:
     """Check whether someone has won."""
