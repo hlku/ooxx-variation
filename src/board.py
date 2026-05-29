@@ -88,7 +88,7 @@ class Board:
 def freshBoard(pos:list) -> None:
     """Game rules: at most 3 steps of one side can be on the board, remove the oldest step."""
     oldest = max(pos) - 6
-    if oldest <= 0: return #no step needs to be removed
+    if oldest not in pos: return #no step needs to be removed
     pos[pos.index(oldest)] = 0
 
 def checkWin(pos:tuple) -> bool:
